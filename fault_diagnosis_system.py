@@ -1,5 +1,4 @@
 import random
-import time
 from collections import deque
 
 # -----------------------------------
@@ -318,25 +317,9 @@ def run_system():
             break
 
 # -----------------------------------
-# Run Program — Keeps Running on Render
+# Run Program
 # -----------------------------------
 
 if __name__ == "__main__":
 
-    run_number = 1
-
-    while True:
-
-        print("\n\n==========================================")
-        print(f" RUN #{run_number} STARTED ")
-        print("==========================================")
-
-        run_system()
-
-        print(f"\n✅ Run #{run_number} Complete.")
-        print("Waiting 60 seconds before next run...")
-        print("==========================================")
-
-        run_number += 1
-
-        time.sleep(60)
+    run_system()
