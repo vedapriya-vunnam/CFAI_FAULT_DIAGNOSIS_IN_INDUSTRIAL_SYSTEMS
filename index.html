@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Based Fault Diagnosis System</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#F7E7DC;
+    padding:40px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    background:#FFFDF9;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.12);
+}
+
+h1{
+    text-align:center;
+    color:#8B5E3C;
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+    font-weight:bold;
+    color:#5C4033;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:1px solid #E3C5B8;
+    border-radius:8px;
+    font-size:16px;
+    background:#FFF8F4;
+}
+
+input:focus{
+    outline:none;
+    border-color:#D8A48F;
+}
+
+button{
+    width:100%;
+    margin-top:20px;
+    padding:12px;
+    background:#D8A48F;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:17px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#C98D74;
+}
+
+.result{
+    margin-top:25px;
+    padding:20px;
+    border-radius:10px;
+    background:#FFF8F4;
+    border-left:6px solid #D8A48F;
+    display:none;
+}
+
+.result h3{
+    color:#8B5E3C;
+    margin-bottom:15px;
+}
+
+.result p{
+    margin:10px 0;
+    line-height:1.6;
+}
+
+.good{
+    color:green;
+    font-weight:bold;
+}
+
+.warning{
+    color:#E67E22;
+    font-weight:bold;
+}
+
+.danger{
+    color:red;
+    font-weight:bold;
+}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#8B5E3C;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔍 AI-Based Fault Diagnosis System</h1>
+
+<label>Temperature</label>
+<input type="number" id="temp" placeholder="Enter Temperature">
+
+<label>Pressure</label>
+<input type="number" id="pressure" placeholder="Enter Pressure">
+
+<label>Vibration</label>
+<input type="number" id="vibration" placeholder="Enter Vibration">
+
+<button onclick="analyzeSystem()">Analyze System</button>
+
+<button
+onclick="location.reload()"
+style="
+margin-top:10px;
+background:#B08B7A;
+">
+Reset
+</button>
+
+<div class="result" id="output"></div>
+
+
+<div class="footer">
+    AI-Based Fault Diagnosis System | Mini Project
+</div>
+</div>
+
+<script>
+
+function detectFaults(temp, pressure, vibration){
+
+    let faults = [];
+
+    if(temp > 90)
+        faults.push("Overheating Fault");
+
+    if(pressure > 120)
+        faults.push("Pressure Fault");
+
+    if(vibration > 75)
+        faults.push("Bearing Fault");
+
+    return faults;
+}
+
+function validateConstraints(temp, pressure, vibration){
+
+    let violations = [];
+
+    if(temp > 100)
+        violations.push("Temperature Limit Exceeded");
+
+    if(pressure > 130)
+        violations.push("Pressure Limit Exceeded");
+
+    if(vibration > 80)
+        violations.push("Vibration Limit Exceeded");
+
+    return violations;
+}
+
+function calculateRisk(temp, pressure, vibration){
+
+    return (
+        temp * 0.4 +
+        pressure * 0.3 +
+        vibration * 0.3
+    );
+}
+
+function maintenanceDecision(risk){
+
+    if(risk > 100)
+        return "Emergency Shutdown";
+
+    if(risk > 80)
+        return "Immediate Maintenance";
+
+    if(risk > 60)
+        return "Inspection Required";
+
+    return "System Normal";
+}
+
+function predictFailure(temp, pressure, vibration){
+
+    let probability = 0;
+
+    if(temp > 90)
+        probability += 0.4;
+
+    if(pressure > 120)
+        probability += 0.3;
+
+    if(vibration > 75)
+        probability += 0.3;
+
+    return probability;
+}
+
+function bfsPath(fault){
+
+    if(fault === "Overheating Fault")
+        return "Overheating Fault → Critical Failure";
+
+    if(fault === "Pressure Fault")
+        return "Pressure Fault → Critical Failure";
+
+    if(fault === "Bearing Fault")
+        return "Bearing Fault → Critical Failure";
+
+    return "No Path";
+}
+
+function analyzeSystem(){
+
+    let temp = Number(document.getElementById("temp").value);
+    let pressure = Number(document.getElementById("pressure").value);
+    let vibration = Number(document.getElementById("vibration").value);
+
+    if(
+        document.getElementById("temp").value === "" ||
+        document.getElementById("pressure").value === "" ||
+        document.getElementById("vibration").value === ""
+    ){
+        alert("Please enter all values");
+        return;
+    }
+
+    let faults = detectFaults(temp, pressure, vibration);
+    let violations = validateConstraints(temp, pressure, vibration);
+    let risk = calculateRisk(temp, pressure, vibration);
+    let decision = maintenanceDecision(risk);
+    let probability = predictFailure(temp, pressure, vibration);
+
+    let path =
+        faults.length > 0
+        ? bfsPath(faults[0])
+        : "No Fault Path";
+
+    let statusClass =
+        probability > 0.7
+        ? "danger"
+        : probability > 0.3
+        ? "warning"
+        : "good";
+
+    document.getElementById("output").style.display = "block";
+
+    document.getElementById("output").innerHTML = `
+
+        <h3>AI Diagnostic Report</h3>
+
+        <p><strong>Detected Faults:</strong><br>
+        ${faults.length ? faults.join("<br>") : "No Faults Detected"}
+        </p>
+
+        <p><strong>Fault Search Path (BFS):</strong><br>
+        ${path}
+        </p>
+
+        <p><strong>Constraint Violations:</strong><br>
+        ${violations.length ? violations.join("<br>") : "No Violations"}
+        </p>
+
+        <p><strong>Risk Score:</strong>
+        ${risk.toFixed(2)}
+        </p>
+
+        <p class="${statusClass}">
+        Failure Probability:
+        ${(probability * 100).toFixed(2)}%
+        </p>
+
+        <p><strong>Recommended Action:</strong><br>
+        ${decision}
+        </p>
+
+        <hr><br>
+
+        <h3>Explainable AI Reasoning</h3>
+
+        <p>
+        ${
+            probability > 0.7
+            ? "High chance of machine failure."
+            : "Machine operating within acceptable limits."
+        }
+        </p>
+
+        <p>
+        ${
+            violations.length
+            ? "Machine operating outside safe constraints."
+            : "No safety constraints violated."
+        }
+        </p>
+    `;
+}
+
+</script>
+
+</body>
+</html>
